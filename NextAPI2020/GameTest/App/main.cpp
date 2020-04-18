@@ -103,8 +103,7 @@ void InitGL()
 // whenever the window needs to be re-painted. */
 //---------------------------------------------------------------------------------
 void Display()
-{	
-	glClearColor(0, 0, 0, 1);
+{
 	glClear(GL_COLOR_BUFFER_BIT);   // Clear the color buffer with current clearing color
 
 	gUserRenderProfiler.Start();	
@@ -178,7 +177,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, 	_In_opt_ HINSTANCE hPrevInstanc
 	// Setup glut.
 	glutInit(&argc, &argv);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	glutInitWindowPosition(100, 100);
+	glutInitWindowPosition(224, 0);
 	int glutWind = glutCreateWindow(APP_WINDOW_TITLE);	
 	HDC dc = wglGetCurrentDC();
 	MAIN_WINDOW_HANDLE = WindowFromDC(dc);
