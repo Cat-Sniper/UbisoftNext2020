@@ -102,4 +102,11 @@ float GameMath::Distance(Vec2 start, Vec2 end)
 	return sqrtf(x2 + y2);
 }
 
+Vec2 GameMath::NormalizeDirection(Vec2 start, Vec2 end)
+{
+	Vec2 direction = { end.x - start.x , end.y - start.y };
+	float length = sqrtf(direction.x * direction.x + direction.y * direction.y);
+	return { direction.x /= length, direction.y /= length };
+}
+
 

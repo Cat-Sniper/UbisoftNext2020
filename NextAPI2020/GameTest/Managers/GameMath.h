@@ -2,6 +2,7 @@
 #define GAMEMATH_H
 
 #include <math.h>
+#include <ratio>
 
 namespace GameMath {
 
@@ -16,7 +17,7 @@ namespace GameMath {
 
 
 	float Distance(Vec2 start, Vec2 end);
-
+	Vec2 NormalizeDirection(Vec2 start, Vec2 end);
 	static Color Blue{ 0.141f, 0.482f, 0.627f };
 	static Color Green{ 0.164f, 0.498f, 0.384f };
 	static Color Yellow{ 1.0f, 0.878f, 0.4f };

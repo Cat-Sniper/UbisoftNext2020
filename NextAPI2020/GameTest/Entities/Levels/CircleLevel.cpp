@@ -55,6 +55,10 @@ CircleLevel::CircleLevel(Player* player)
 		
 	}
 
+	// TESTING
+
+	SpawnEnemy(SPIKE, GetSectionTop(), GetSectionLeft(), GetSectionRight());
+
 }
 
 CircleLevel::~CircleLevel()
@@ -114,13 +118,7 @@ Vec2 CircleLevel::GetSectionBack(int left, int right)
 
 Vec2 CircleLevel::GetSectionNormal(int left, int right)
 {
-	// Direction Vector
-	Vec2 d = { m_foregroundGeometry[right].x - m_foregroundGeometry[left].x,
-		    m_foregroundGeometry[right].y - m_foregroundGeometry[left].y };
-	
-	// Normalize
-	float length = sqrtf(d.x * d.x + d.y * d.y);
-	return { d.x /= length, d.y /= length };
+	return GameMath::NormalizeDirection(m_foregroundGeometry[left], m_foregroundGeometry[right]);
 }
 
 Vec2 CircleLevel::GetBulletDirection(int left, int right)
@@ -128,12 +126,8 @@ Vec2 CircleLevel::GetBulletDirection(int left, int right)
 	Vec2 back = GetSectionBack(left, right);
 	Vec2 front = GetSectionTop(left, right);
 
-	
-	Vec2 direction = { back.x - front.x , back.y - front.y };
-	float length = sqrtf(direction.x * direction.x + direction.y * direction.y);
-	return { direction.x /= length, direction.y /= length };
+	return GameMath::NormalizeDirection(front, back);
 }
-
 Vec2 CircleLevel::GetSectionTop(int left, int right) {
 	return { (m_foregroundGeometry[left].x + m_foregroundGeometry[right].x) / 2,
 		    (m_foregroundGeometry[left].y + m_foregroundGeometry[right].y) / 2 };
@@ -246,9 +240,6 @@ void CircleLevel::TransformPlayer(float deltaTime) {
 	ptr_player->SetAngle(desiredAngle);
 	ptr_player->SetPosition(centroidPt);
 	m_hasMoved = false;
-	
-
-	
 }
 
 void CircleLevel::TransformBullet(Bullet * bullet)
@@ -282,7 +273,6 @@ void CircleLevel::TransformBullet(Bullet * bullet)
 	bulletPos.y += normal.y * bullet->GetSpeed();
 
 	Vec2 t = { bulletPos.x- centroidPt.x, bulletPos.y - centroidPt.y };								// Translation
-	
 	
 
 	// Declare and initialize composite matrix to identity
@@ -348,13 +338,19 @@ void CircleLevel::SpawnBullet(bool enemyBullet, Vec2 position) {
 	Bullet* bullet = new Bullet(enemyBullet, position, GetSectionLeft(), GetSectionRight());
 	m_bullets.emplace_back(bullet);
 	TransformBullet(bullet);
+	
+	for (auto &i : m_enemies) {
+		i->GetShot();
+	}
 }
 
-void CircleLevel::SpawnEnemy(EnemyType enemy, Vec2 position) {
+void CircleLevel::SpawnEnemy(EnemyType enemy, Vec2 position, int left, int right) {
 
 	switch (enemy) {
 	case EnemyType::SPIKE:
-		Enemy* enemy = new Spike(position);
+
+		Enemy* enemy = new Spike(position, GetSectionTop(left, right), GetSectionBack(left, right));
+
 		m_enemies.emplace_back(enemy);
 		TransformEnemy(enemy);
 		break;

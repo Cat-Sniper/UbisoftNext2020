@@ -71,7 +71,7 @@ void InputManager::Update(float deltaTime)
 		}
 		if (App::GetController().CheckButton(XINPUT_GAMEPAD_B, true))
 		{
-			m_levelManager->GetCurrentLevel()->SpawnEnemy(SPIKE, { 100,100 });
+			//m_levelManager->GetCurrentLevel()->SpawnEnemy(SPIKE, { 100,100 });
 		}
 
 	}

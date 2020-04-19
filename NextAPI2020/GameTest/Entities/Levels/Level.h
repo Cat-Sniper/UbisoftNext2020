@@ -46,7 +46,7 @@ public:
 
 	virtual void Update(float deltaTime) = 0;
 	virtual void SpawnBullet(bool enemyBullet, Vec2 position) = 0;
-	virtual void SpawnEnemy(EnemyType enemy, Vec2 position) = 0;
+	virtual void SpawnEnemy(EnemyType enemy, Vec2 position, int left, int right) = 0;
 	virtual void MoveLeft() = 0;
 	virtual void MoveRight() = 0;
 

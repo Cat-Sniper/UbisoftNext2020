@@ -19,11 +19,12 @@ private:
 	void TransformEnemy(Enemy* enemy);
 
 public:
+
 	CircleLevel(Player* player);
 	~CircleLevel();
 	void Update(float deltaTime);
 	void SpawnBullet(bool enemyBullet, Vec2 position);
-	void SpawnEnemy(EnemyType enemy, Vec2 position);
+	void SpawnEnemy(EnemyType enemy, Vec2 position, int left, int right);
 	void MoveLeft();
 	void MoveRight();
 	Vec2 GetSectionTop(int left, int right);

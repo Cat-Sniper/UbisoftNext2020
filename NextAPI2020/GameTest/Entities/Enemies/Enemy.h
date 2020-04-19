@@ -26,6 +26,8 @@ public:
 
 	Vec2* GetGeometry() { return m_geometry; }
 
+	virtual void GetShot() = 0;
+
 	void SetDirection(Vec2 direction) { m_direction = direction; }
 	const int VERTS() { return m_nVerts; }
 };
