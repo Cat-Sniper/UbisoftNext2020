@@ -36,7 +36,7 @@ void Update(float deltaTime)
 	//------------------------------------------------------------------------
 	if (App::GetController().CheckButton(XINPUT_GAMEPAD_B, true))
 	{
-		App::PlaySound(".\\TestData\\Test.wav");
+		
 	}
 }
 

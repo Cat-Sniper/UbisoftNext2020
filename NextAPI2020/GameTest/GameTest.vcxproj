@@ -187,9 +187,10 @@
     <ClInclude Include="App\SimpleSound.h" />
     <ClInclude Include="App\SimpleSprite.h" />
     <ClInclude Include="App\TextureLoader.h" />
-    <ClInclude Include="Entities\Enemy.h" />
-    <ClInclude Include="Entities\Entity.h" />
-    <ClInclude Include="Entities\Level.h" />
+    <ClInclude Include="Entities\Bullet.h" />
+    <ClInclude Include="Entities\Enemies\Enemy.h" />
+    <ClInclude Include="Entities\Enemies\Spike.h" />
+    <ClInclude Include="Entities\Levels\Level.h" />
     <ClInclude Include="Entities\Levels\AllLevels.h" />
     <ClInclude Include="Entities\Levels\CircleLevel.h" />
     <ClInclude Include="Entities\Player.h" />
@@ -197,7 +198,6 @@
     <ClInclude Include="Managers\GameMath.h" />
     <ClInclude Include="Managers\InputManager.h" />
     <ClInclude Include="Managers\LevelManager.h" />
-    <ClInclude Include="Managers\Renderer.h" />
     <ClInclude Include="Managers\Types.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -209,6 +209,8 @@
     <ClCompile Include="App\SimpleSound.cpp" />
     <ClCompile Include="App\SimpleSprite.cpp" />
     <ClCompile Include="App\TextureLoader.cpp" />
+    <ClCompile Include="Entities\Bullet.cpp" />
+    <ClCompile Include="Entities\Enemies\Spike.cpp" />
     <ClCompile Include="Entities\Levels\CircleLevel.cpp" />
     <ClCompile Include="Entities\Player.cpp" />
     <ClCompile Include="GameTest.cpp" />
@@ -216,7 +218,6 @@
     <ClCompile Include="Managers\GameMath.cpp" />
     <ClCompile Include="Managers\InputManager.cpp" />
     <ClCompile Include="Managers\LevelManager.cpp" />
-    <ClCompile Include="Managers\Renderer.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

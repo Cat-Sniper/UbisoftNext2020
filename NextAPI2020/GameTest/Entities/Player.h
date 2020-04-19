@@ -22,15 +22,18 @@ private:
 
 	
 public:
+	static const int VERTS = GEOMETRY_VERTS;
 
 	Player();
+
+	void Draw();
 	int GetSuper() { return m_remainingSupers; }
 	Vec2 GetPosition() { return m_position; }
 	void SetPosition(Vec2 position) { m_position = position; }
 	Vec2 GetGeometry(int i) { return m_geometry[i]; }
-	Vec2* GetGeometry();
+	Vec2* GetGeometry() { return m_geometry; }
 
-	static const int VERTS = GEOMETRY_VERTS;
+	
 
 	void SetAngle(float angle) { m_angle = angle; }
 	float GetAngle() { return m_angle; }

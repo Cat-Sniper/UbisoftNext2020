@@ -84,7 +84,7 @@ void GameMath::Scale2D(float sx, float sy, Vec2 fixedPt, Matrix3x3 matComposite)
 }
 
 // Using a composite matrix, calculate transformed coordinates.
-void GameMath::TransformVerts2D(int nVerts, Vec2 * verts, Matrix3x3 matComposite)
+void GameMath::TransformVerts2D(int nVerts, Vec2 *verts, Matrix3x3 matComposite)
 {
 
 
@@ -93,6 +93,13 @@ void GameMath::TransformVerts2D(int nVerts, Vec2 * verts, Matrix3x3 matComposite
 		verts[k].y = matComposite[1][0] * verts[k].x + matComposite[1][1] * verts[k].y + matComposite[1][2];
 		verts[k].x = temp;
 	}
+}
+
+float GameMath::Distance(Vec2 start, Vec2 end)
+{
+	float x2 = (end.x - start.x) * (end.x - start.x);
+	float y2 = (end.y - start.y) * (end.y - start.y);
+	return sqrtf(x2 + y2);
 }
 
 

@@ -1,25 +1,33 @@
 #ifndef CIRCLE_LEVEL_H
 #define CIRCLE_LEVEL_H
 
-#include "Entities/Level.h"
+#include "Level.h"
+
+
+class Spike;
 
 class CircleLevel : public Level {
 
 private:
+
+	Vec2 GetSectionBack(int left, int right);
+	Vec2 GetSectionNormal(int left, int right);
+	Vec2 GetBulletDirection(int left, int right);
 	
-	
+	void TransformPlayer(float deltaTime);
+	void TransformBullet(Bullet* bullet);
+	void TransformEnemy(Enemy* enemy);
+
 public:
 	CircleLevel(Player* player);
-
+	~CircleLevel();
 	void Update(float deltaTime);
-	Vec2 GetForground(int i) { return m_foregroundGeometry[i]; }
-	Vec2 GetBackground(int i) { return m_backgroundGeometry[i]; }
-	Vec2 GetSectionCenter();
-	Vec2 GetSectionNormal();
-	Vec2 GetPlayerCenter();
-
+	void SpawnBullet(bool enemyBullet, Vec2 position);
+	void SpawnEnemy(EnemyType enemy, Vec2 position);
 	void MoveLeft();
 	void MoveRight();
-	void TransformPlayer();
+	Vec2 GetSectionTop(int left, int right);
+	Vec2 GetSectionTop();
+
 };
 #endif

@@ -12,4 +12,7 @@ struct Color {
 
 typedef float Matrix3x3[3][3];
 
+enum EnemyType {
+	SPIKE
+};
 #endif
