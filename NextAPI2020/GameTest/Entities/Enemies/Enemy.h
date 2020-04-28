@@ -3,18 +3,33 @@
 #include "Managers/Types.h"
 
 class Enemy {
+
+
+
 protected:
-	const int m_nVerts = 16;
-	Vec2 m_geometry[16];
+	
+	Vec2 m_geometry[MAX_VERTS];
+	Vec2 m_stops[NUM_STOPS];
 	Vec2 m_position;
 	Vec2 m_direction;
-	float m_hitRadius;
-	float m_scale;
-	float m_angle;
-	int m_section[2];
+	
+	int m_section[2];			// 0 = left, 1 = right
+	int m_currentStop;
+	int m_nVerts = MAX_VERTS;
+
 	bool m_canShoot;
 	bool m_isAlive;
 	bool m_hurtOnTouch;
+	bool m_canMove;
+
+	float m_hitRadius;
+	float m_scale;
+	float m_angle;
+
+	float m_moveDelay = 2500.0f;
+	float m_adjustment;
+	float m_timeSinceLastMove;
+	float m_currentTime;
 
 public:
 
@@ -36,5 +51,6 @@ public:
 	int GetRight() { return m_section[1]; }
 	const int VERTS() { return m_nVerts; }
 	bool HurtOnTouch() { return m_hurtOnTouch; }
+
 };
 #endif

@@ -1,6 +1,11 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#define NUM_STOPS 15
+#define LEVEL_VERTS 16
+#define NUM_SECTIONS 16
+#define MAX_VERTS 16
+
 struct Vec2 {
 	float x = 0;
 	float y = 0;

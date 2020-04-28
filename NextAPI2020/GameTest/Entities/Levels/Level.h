@@ -12,8 +12,7 @@ class GameManager;
 
 class Level {
 
-#define LEVEL_VERTS 16
-#define NUM_SECTIONS 16
+
 
 protected:
 
@@ -25,13 +24,21 @@ protected:
 	Vec2 m_foregroundGeometry[LEVEL_VERTS];
 	Vec2 m_backgroundGeometry[LEVEL_VERTS];
 
-	int m_activeEnemies = 0;
-	float m_biggestSectionLength = 0;
+	// Contains nodes along the center of each section
+	Vec2 m_sectionStops[NUM_SECTIONS][NUM_STOPS];
+
+	// The left and right edges touching the player: left is the section identifier
+	int m_currentSection[2]; // i.e. section {0, 1} = 0, {1, 2} = 1 ... {14, 15} = 14, {15, 0} = 15
+
+	// Distance between foreground and background of each section
 	float m_sectionLengths[NUM_SECTIONS];
+	float m_biggestSectionLength = 0;
+
+	int m_activeEnemies = 0;
+	
 	bool m_loops;
 	bool m_hasMoved;
-	int m_currentSection[2];				// index of the two vertices the player is touching. The left defines the section the player is in
-									// i.e. section {0, 1} = 0, {1, 2} = 1 ... {14, 15} = 14, {15, 0} = 15
+									
 	Color m_levelColor;
 	Color m_playerColor;
 	
@@ -51,8 +58,8 @@ protected:
 	void TransformPlayer(float deltaTime);
 	void TransformBullet(Bullet* bullet);
 	void TransformEnemy(Enemy* enemy);
-
 	void PopulateSectionLengths();
+	void PopulateSectionStops();
 	
 
 public:
@@ -67,9 +74,10 @@ public:
 	void SuperZapper();
 
 	void SetLevelColor(Color levelColor) { m_levelColor = levelColor; }
-	Vec2 GetSectionTop(int left, int right);
+	Vec2 GetSectionStop(int section, int stop) { return m_sectionStops[section][stop]; }
+	Vec2 GetSectionFront(int left, int right);
 	Vec2 GetSectionBack(int left, int right);
-	Vec2 GetSectionTop();
+	Vec2 GetSectionFront();
 	int GetSectionLeft() { return m_currentSection[0]; }
 	int GetSectionRight() { return m_currentSection[1]; }
 	int GetVerts() { return LEVEL_VERTS; }

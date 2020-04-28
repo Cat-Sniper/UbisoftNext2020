@@ -6,30 +6,18 @@
 
 Spike::Spike(Vec2 position, Vec2 sectionTop, Vec2 sectionBack, Vec2 section, float adjustment)
 {
+	
 	m_isAlive = true;
 	m_hurtOnTouch = true;
 	m_hitRadius = 3.0f;
 	m_adjustment = adjustment;
-	float lengthOfSection = GameMath::Distance(sectionTop, sectionBack);
-	float currentLength = GameMath::Distance(position, sectionBack);
-	Vec2 Direction = GameMath::NormalizeDirection(sectionTop, sectionBack);
-	m_section[0] = (int)section.x;
-	m_section[1] = (int)section.y;
-	m_currentStop = currentLength * (NUM_STOPS-1) / lengthOfSection;
-
-	if (m_currentStop >= NUM_STOPS / 2) m_currentStop /= 2;
-
-	// Populate Vector stops
-	for (int i = 0; i < NUM_STOPS; i++) {
-		currentLength = lengthOfSection * i / (NUM_STOPS-1);
-		Vec2 stopPosition = { sectionTop.x + Direction.x * currentLength,
-						  sectionTop.y + Direction.y * currentLength };
-		m_stops[(NUM_STOPS-1) - i] = stopPosition;
-	}
+	
+	PopulateStops(position, sectionTop, sectionBack, section);
 	
 	m_position = m_stops[m_currentStop];
 
 	// Initialize Geometry
+	m_nVerts = 16;
 	m_geometry[0]  = { 3, 0}; m_geometry[1]  = { 1.5, 0.5}; m_geometry[2]  = { 2,-2};  m_geometry[3]  = { 0.5, -1.5};
 	m_geometry[4]  = { 0,-3}; m_geometry[5]  = {-0.5,-1.5}; m_geometry[6]  = {-2,-2};  m_geometry[7]  = {-1.5, -0.5};
 	m_geometry[8]  = {-3, 0}; m_geometry[9]  = {-1.5, 0.5}; m_geometry[10] = {-2, 2};  m_geometry[11] = {-0.5,  1.5};

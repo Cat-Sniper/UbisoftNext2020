@@ -55,7 +55,6 @@ public:
 
 		}
 
-		PopulateSectionLengths();
 		m_enemySpawner->InitializeSpawner(16, nEnemies);
 		ptr_player->SetColor(player);
 		ptr_player->DoneLoading(true);

@@ -18,7 +18,7 @@ Vec2 Level::GetSectionBack(int left, int right)
 }
 
 // Use midpoint formula on the foreground geometry of the specified section
-Vec2 Level::GetSectionTop(int left, int right)
+Vec2 Level::GetSectionFront(int left, int right)
 {
 	if (right == 16) right = 0;
 	return { (m_foregroundGeometry[left].x + m_foregroundGeometry[right].x) / 2,
@@ -26,9 +26,9 @@ Vec2 Level::GetSectionTop(int left, int right)
 }
 
 // Get the top center of current section
-Vec2 Level::GetSectionTop()
+Vec2 Level::GetSectionFront()
 {
-	return GetSectionTop(GetSectionLeft(), GetSectionRight());
+	return GetSectionFront(GetSectionLeft(), GetSectionRight());
 }
 
 void Level::IncreaseDifficulty()
@@ -41,7 +41,7 @@ void Level::IncreaseDifficulty()
 Vec2 Level::GetSectionNormal(int left, int right)
 {
 	Vec2 back = GetSectionBack(left, right);
-	Vec2 front = GetSectionTop(left, right);
+	Vec2 front = GetSectionFront(left, right);
 
 	return GameMath::NormalizeDirection(front, back);
 }
@@ -77,7 +77,7 @@ void Level::TransformPlayer(float deltaTime)
 	// Set Geometric tranformation parameters
 	Vec2 pivotPt = centroidPt;
 	Vec2 fixedPt = centroidPt;
-	playerPos = GetSectionTop(m_currentSection[0], m_currentSection[1]);
+	playerPos = GetSectionFront(m_currentSection[0], m_currentSection[1]);
 	centerPos = GetSectionBack(m_currentSection[0], m_currentSection[1]);
 	Vec2 t = { playerPos.x - centroidPt.x, playerPos.y - centroidPt.y };								// Translation
 	Vec2 normal = GameMath::NormalizeDirection(m_foregroundGeometry[GetSectionLeft()], m_foregroundGeometry[GetSectionRight()]);
@@ -160,7 +160,7 @@ void Level::TransformBullet(Bullet * bullet)
 
 void Level::TransformEnemy(Enemy * enemy)
 {
-	// Bullet Geometry information
+	// Enemy Geometry information
 	int nVerts = enemy->VERTS();
 	Vec2* verts = enemy->GetGeometry();
 
@@ -188,12 +188,14 @@ void Level::TransformEnemy(Enemy * enemy)
 	// Construct composite matrix for transformation sequence
 	GameMath::Translate2D(t.x, t.y, matComposite);
 
-	// Apply composite matrix to bullet vertices
+	// Apply composite matrix to enemy vertices
 	GameMath::TransformVerts2D(nVerts, verts, matComposite);
 
 	enemy->SetPosition(enemyPos);
 }
 
+
+// Determines the length of each section
 void Level::PopulateSectionLengths()
 {
 
@@ -203,9 +205,34 @@ void Level::PopulateSectionLengths()
 
 		if (i == NUM_SECTIONS - 1) right = 0;
 
-		float sectionLength = GameMath::Distance(GetSectionTop(left, right), GetSectionBack(left, right));
+		float sectionLength = GameMath::Distance(GetSectionFront(left, right), GetSectionBack(left, right));
 		if (m_biggestSectionLength < sectionLength) m_biggestSectionLength = sectionLength;
 		m_sectionLengths[i] = sectionLength;
+	}
+}
+
+// splits each section into a number of nodes and stores those positions
+// Accessed externally through m_sectionStops[sectionIndex][stopIndex]
+void Level::PopulateSectionStops()
+{
+
+	for (int i = 0; i < NUM_SECTIONS; i++) {
+
+		int right;
+		if (i == (NUM_SECTIONS - 1)) right = 0;
+		else right = i + 1;
+
+		Vec2 sectionTop = GetSectionFront(i, right);
+		Vec2 sectionBack = GetSectionBack(i, right);
+		Vec2 direction = GameMath::NormalizeDirection(sectionTop, sectionBack);
+
+		for (int j = 0; j < NUM_STOPS; j++) {
+
+			float currentLength = m_sectionLengths[i] * j / (NUM_STOPS - 1);
+			Vec2 stopPosition = { sectionTop.x + direction.x * currentLength,
+							  sectionTop.y + direction.y * currentLength };
+			m_sectionStops[i][(NUM_STOPS - 1) - j] = stopPosition;
+		}
 	}
 }
 
@@ -393,7 +420,7 @@ void Level::SpawnEnemy(EnemyType enemy, Vec2 position, int left)
 	switch (enemy) {
 	case EnemyType::SPIKE:
 
-		Enemy* enemy = new Spike(position, GetSectionTop(left, right), GetSectionBack(left, right), {(float)left, (float)right}, m_speedAdjustment);
+		Enemy* enemy = new Spike(position, GetSectionFront(left, right), GetSectionBack(left, right), {(float)left, (float)right}, m_speedAdjustment);
 
 		m_enemies.emplace_back(enemy);
 		TransformEnemy(enemy);

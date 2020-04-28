@@ -190,6 +190,7 @@
     <ClInclude Include="Entities\Bullet.h" />
     <ClInclude Include="Entities\Enemies\AllEnemies.h" />
     <ClInclude Include="Entities\Enemies\Enemy.h" />
+    <ClInclude Include="Entities\Enemies\Flipper.h" />
     <ClInclude Include="Entities\Enemies\Spike.h" />
     <ClInclude Include="Entities\Levels\CrossLevel.h" />
     <ClInclude Include="Entities\Levels\Level.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="App\SimpleSprite.cpp" />
     <ClCompile Include="App\TextureLoader.cpp" />
     <ClCompile Include="Entities\Bullet.cpp" />
+    <ClCompile Include="Entities\Enemies\Flipper.cpp" />
     <ClCompile Include="Entities\Enemies\Spike.cpp" />
     <ClCompile Include="Entities\Levels\Level.cpp" />
     <ClCompile Include="Entities\Player.cpp" />
