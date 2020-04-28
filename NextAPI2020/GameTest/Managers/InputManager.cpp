@@ -18,72 +18,100 @@ InputManager::InputManager(GameManager *gameManager, LevelManager *levelManager,
 
 void InputManager::Update(float deltaTime)
 {
-	float elapsedTime = m_currentTime + deltaTime;
+	switch (m_gameManager->GetCurrentState()) {
 
-	if (m_canMove) {
+		// Start game, Quit, Maybe level select?
+	case MENU:
+		if (App::GetController().CheckButton(XINPUT_GAMEPAD_START, true))
+		{
+			m_gameManager->StartGame();
+		}
+		break;
 
-		if (App::GetController().GetLeftThumbStickX() > 0.5f)
+		// Quit, restart, Unpause
+	case PAUSED:
+		if (App::GetController().CheckButton(XINPUT_GAMEPAD_START, true))
 		{
-			m_lastMovement = elapsedTime;
-			m_canMove = false;
-			m_levelManager->GetCurrentLevel()->MoveRight();
+			m_gameManager->UnPause();
 		}
-		if (App::GetController().GetLeftThumbStickX() < -0.5f)
-		{
-			m_lastMovement = elapsedTime;
-			m_canMove = false;
-			m_levelManager->GetCurrentLevel()->MoveLeft();
-		}
-		if (App::GetController().GetLeftThumbStickY() > 0.5f)
-		{
+		break;
 
-		}
-		if (App::GetController().GetLeftThumbStickY() < -0.5f)
-		{
+		// Fall through: same inputs as gameplay
+	case WARPING:
 
-		}
-		if (App::GetController().CheckButton(XINPUT_GAMEPAD_DPAD_UP, false))
-		{
+	// Gameplay inputs: move left or right, shoot, superzapper.
+	case GAMEPLAY: 
+	{
 
-		}
-		if (App::GetController().CheckButton(XINPUT_GAMEPAD_DPAD_DOWN, false))
+		if (m_player->IsAlive()) 
 		{
 
-		}
-		if (App::GetController().CheckButton(XINPUT_GAMEPAD_DPAD_LEFT, false))
-		{
+			float elapsedTime = m_currentTime + deltaTime;
 
-		}
-		if (App::GetController().CheckButton(XINPUT_GAMEPAD_DPAD_RIGHT, false))
-		{
+			if (m_canMove) {
 
+				if (App::GetController().GetLeftThumbStickX() > 0.5f)
+				{
+					m_lastMovement = elapsedTime;
+					m_canMove = false;
+					m_levelManager->GetCurrentLevel()->MoveRight();
+				}
+
+				if (App::GetController().GetLeftThumbStickX() < -0.5f)
+				{
+					m_lastMovement = elapsedTime;
+					m_canMove = false;
+					m_levelManager->GetCurrentLevel()->MoveLeft();
+				}
+			}
+
+			if (m_canShoot) {
+
+				if (App::GetController().CheckButton(XINPUT_GAMEPAD_A, false))
+				{
+					m_lastShot = elapsedTime;
+					m_canShoot = false;
+					m_levelManager->GetCurrentLevel()->SpawnBullet(false, m_levelManager->GetCurrentLevel()->GetSectionTop());
+					App::PlaySound("TestData\\Test.wav");
+				}
+				if (App::GetController().CheckButton(XINPUT_GAMEPAD_B, true))
+				{
+					if (m_player->GetSuper() == 1) {
+						m_lastShot = elapsedTime;
+						m_canShoot = false;
+						m_levelManager->GetCurrentLevel()->SuperZapper();
+						m_player->UseSuper();
+					}
+				}
+			}
+
+			if (elapsedTime - m_lastMovement > m_moveDelay) {
+				m_canMove = true;
+			}
+
+			if (elapsedTime - m_lastShot > m_shootDelay) {
+				m_canShoot = true;
+			}
+			m_currentTime = elapsedTime;
 		}
+
+		if (App::GetController().CheckButton(XINPUT_GAMEPAD_START, true))
+		{
+			m_gameManager->Pause();
+		}
+		break;
 	}
 
-	if (m_canShoot) {
-		if (App::GetController().CheckButton(XINPUT_GAMEPAD_A, true))
+	// Game Over: Back to menu, Restart or Quit
+	case GAMEOVER:
+
+		if (App::GetController().CheckButton(XINPUT_GAMEPAD_START, true))
 		{
-			m_lastShot = elapsedTime;
-			m_canShoot = false;
-			m_levelManager->GetCurrentLevel()->SpawnBullet(false, m_levelManager->GetCurrentLevel()->GetSectionTop());
-			m_gameManager->AddToScore(10);
-			App::PlaySound("TestData\\Test.wav");
+			m_gameManager->StartGame();
 		}
-		if (App::GetController().CheckButton(XINPUT_GAMEPAD_B, true))
-		{
-			//m_levelManager->GetCurrentLevel()->SpawnEnemy(SPIKE, { 100,100 });
-		}
-
+		break;
 	}
-
-	if (elapsedTime - m_lastMovement > m_moveDelay) {
-		m_canMove = true;
-	}
-
-	if (elapsedTime - m_lastShot > m_shootDelay) {
-		m_canShoot = true;
-	}
-	m_currentTime = elapsedTime;
+	
 }
 
 InputManager::~InputManager()

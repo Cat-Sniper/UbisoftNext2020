@@ -5,6 +5,7 @@
 
 class Bullet {
 #define BULLET_VERTS 16
+#define INITIAL_RADIUS 15.0f
 
 private:
 	Vec2 m_startPosition;
@@ -14,11 +15,12 @@ private:
 
 	bool m_isAlive = true;
 	bool m_enemyBullet;
-	int m_section[2];		// order determines direction
+	int m_section[2];		
 	Vec2 m_direction;
 
 
-	float m_speed = 5.0f;
+	float m_speed = 7.0f;
+	float m_speedDampener = 0;
 	float m_scale = 1.0f;
 	float m_lastScale;
 	float m_angle = 0.0f;
@@ -32,7 +34,7 @@ private:
 public:
 	static const int VERTS = BULLET_VERTS;
 
-	Bullet(bool enemyBullet, Vec2 position, int sectionLeft, int sectionRight);
+	Bullet(bool enemyBullet, Vec2 position, int sectionLeft, int sectionRight, float speedDamp);
 
 	void Draw();
 	void Update(float deltaTime);
@@ -48,6 +50,8 @@ public:
 	int GetRight() { return m_section[1]; }
 	float GetSpeed() { return m_speed; }
 	float GetScale() { return m_scale; }
+	float HitRadius() { return INITIAL_RADIUS * m_scale; }
+	void setAlive(bool alive) { m_isAlive = alive; }
 	bool IsAlive() { return m_isAlive; }
 
 };
