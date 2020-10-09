@@ -20,13 +20,4 @@ typedef float Matrix3x3[3][3];
 enum EnemyType {
 	SPIKE
 };
-
-enum GameState {
-	MENU,
-	PAUSED,
-	WARPING,
-	GAMEPLAY,
-	GAMEOVER,
-	LOAD
-};
 #endif

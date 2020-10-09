@@ -17,8 +17,8 @@ private:
 	
 	float m_currentTime;
 
-	const float m_moveDelay = 40.0f;
-	const float m_shootDelay = 69.0f;
+	const float m_moveDelay = 50.0f;
+	const float m_shootDelay = 10.0f;
 	float m_lastMovement;
 	float m_lastShot;
 	bool m_canMove;

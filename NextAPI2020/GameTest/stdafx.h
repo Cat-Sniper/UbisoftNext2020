@@ -12,4 +12,3 @@
 
 // TODO: reference additional headers your program requires here
 #include "Managers/Types.h"
-#include "Managers/GameMath.h"

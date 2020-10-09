@@ -4,13 +4,12 @@
 #include "App/app.h"
 #include "Managers/GameMath.h"
 
-Bullet::Bullet(bool enemyBullet, Vec2 position, int left, int right, float speedDamp)
+Bullet::Bullet(bool enemyBullet, Vec2 position, int left, int right)
 {
 	m_enemyBullet = enemyBullet;
 	m_position = position;
 	m_startPosition = position;
 	m_lastScale = m_scale;
-	m_speedDampener = speedDamp;
 
 	m_angle = 90.0f;
 	if (enemyBullet) {
@@ -71,12 +70,11 @@ void Bullet::Update(float deltaTime)
 		centroidPt.y = (float)ySum / BULLET_VERTS;
 
 		Vec2 newPos = m_position;
-		newPos.x += m_direction.x * (m_speed * m_speedDampener);
-		newPos.y += m_direction.y * (m_speed * m_speedDampener);
+		newPos.x += m_direction.x * m_speed;
+		newPos.y += m_direction.y * m_speed;
 
 		float newDistance = GameMath::Distance(m_position, m_destination);
 		m_scale = newDistance / m_distance;
-			
 
 		// m_distance / m_distance = 1
 		// m_destinataion / m_distance = 0

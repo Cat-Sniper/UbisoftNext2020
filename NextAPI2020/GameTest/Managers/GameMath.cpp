@@ -102,15 +102,6 @@ float GameMath::Distance(Vec2 start, Vec2 end)
 	return sqrtf(x2 + y2);
 }
 
-Vec2 GameMath::RandomPosition(Vec2 start, Vec2 end)
-{
-	// u = [0,1]
-	float u =  static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1)));
-	Vec2 randomPoint = { (1 - u) * start.x + (u * end.x),
-	                     (1 - u) * start.y + (u * end.y) };
-	return randomPoint;
-}
-
 Vec2 GameMath::NormalizeDirection(Vec2 start, Vec2 end)
 {
 	Vec2 direction = { end.x - start.x , end.y - start.y };

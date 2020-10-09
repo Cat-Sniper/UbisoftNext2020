@@ -4,10 +4,11 @@
 #include "App/app.h"
 #include "Managers/GameMath.h"
 
-Spike::Spike(Vec2 position, Vec2 sectionTop, Vec2 sectionBack, Vec2 section, float adjustment)
+Spike::Spike(Vec2 position, Vec2 sectionTop, Vec2 sectionBack)
 {
 	
 	m_isAlive = true;
+<<<<<<< HEAD
 	m_hurtOnTouch = true;
 	m_hitRadius = 3.0f;
 	m_adjustment = adjustment;
@@ -15,6 +16,23 @@ Spike::Spike(Vec2 position, Vec2 sectionTop, Vec2 sectionBack, Vec2 section, flo
 	PopulateStops(position, sectionTop, sectionBack, section);
 	
 	m_position = m_stops[m_currentStop];
+=======
+	m_position = position;
+	
+	float lengthOfSection = GameMath::Distance(sectionTop, sectionBack);
+	float currentLength = GameMath::Distance(position, sectionBack);
+	Vec2 Direction = GameMath::NormalizeDirection(sectionTop, sectionBack);
+
+	m_currentStop = currentLength * 19 / lengthOfSection;
+
+	// Populate Vector stops
+	for (int i = 0; i < 20; i++) {
+		currentLength = lengthOfSection * i / 19;
+		Vec2 stopPosition = { sectionTop.x + Direction.x * currentLength,
+						  sectionTop.y + Direction.y * currentLength };
+		m_stops[19 - i] = stopPosition;
+	}
+>>>>>>> parent of 3e7adfd... Final Submission
 
 	// Initialize Geometry
 	m_nVerts = 16;
@@ -26,9 +44,6 @@ Spike::Spike(Vec2 position, Vec2 sectionTop, Vec2 sectionBack, Vec2 section, flo
 	for (int i = 0; i < m_nVerts; i++) {
 		m_geometry[i].x += 3;
 		m_geometry[i].y += 3;
-
-		m_geometry[i].x *= 2;
-		m_geometry[i].y *= 2;
 	}
 }
 
@@ -39,18 +54,6 @@ Spike::~Spike()
 void Spike::Update(float deltaTime)
 {
 	if (m_isAlive) {
-
-		float elapsedTime = m_currentTime + deltaTime;
-
-		// Move toward the player if possible
-		if (m_canMove) {
-			
-			m_timeSinceLastMove = elapsedTime;
-			m_currentStop++;
-			m_position = m_stops[m_currentStop];
-			m_canMove = false;
-		}
-
 
 		// Calculate position of player center
 		Vec2 centroidPt;
@@ -76,13 +79,6 @@ void Spike::Update(float deltaTime)
 
 		// Apply composite matrix to bullet vertices
 		GameMath::TransformVerts2D(m_nVerts, m_geometry, matComposite);
-
-		
-		if (elapsedTime - m_timeSinceLastMove > m_moveDelay - m_adjustment && m_currentStop < (NUM_STOPS-1)) {
-			m_canMove = true;
-		}
-
-		m_currentTime = elapsedTime;
 
 	}
 }
@@ -112,8 +108,7 @@ void Spike::Draw()
 void Spike::GetShot()
 {
 	m_currentStop--;
-	m_timeSinceLastMove = m_currentTime;
-
+	
 	if (m_currentStop == 0) {
 		m_isAlive = false;
 	}
